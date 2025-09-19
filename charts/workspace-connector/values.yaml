@@ -1,0 +1,89 @@
+# Default values for workspace-connector
+# This is a YAML-formatted file. Declare variables to be passed into your templates.
+
+# Configuration for the workspace connector
+config:
+  # Path to the configuration file
+  path: config/aegis.toml
+  # Environment variables to pass to the application
+  env: {}
+
+# Image configuration
+image:
+  # Image repository
+  repository: us-central1-docker.pkg.dev/friendly-access-450904-h1/workspace-connector/workspace-connector
+  # Image tag
+  tag: latest
+  # Image pull policy
+  pullPolicy: Always
+
+# Service account configuration
+serviceAccount:
+  workloadIdentity:
+    # GCP service account to use for authentication
+    gcpServiceAccount: lighthouse@aegis-reasonablesecurityai.iam.gserviceaccount.com
+
+# Container resource limits (max) and requests (required)
+resources: {}
+  # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+  # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+# Service configuration
+service:
+  # Service type
+  type: ClusterIP
+  # Service port
+  port: 8080
+  # Node port (only used if service.type is NodePort)
+  # nodePort: 
+  # LoadBalancer IP (only used if service.type is LoadBalancer)
+  # loadBalancerIP:
+
+# Ingress configuration for external access
+ingress:
+  # Enable/disable ingress
+  enabled: true
+  
+  # Ingress class name
+  className: nginx
+  
+  # Ingress hostname
+  host: console.aegisai.ai
+  pathPrefix: /reasonablesecurityai/workspace-connector(/|$)(.*)
+  pathType: ImplementationSpecific
+
+  # Ingress annotations
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  
+  # TLS configuration
+  tls:
+    # Enable TLS
+    enabled: true
+    # Name of the secret containing TLS certificate and key
+    secretName: ""
+
+
+# Persistence configuration for database storage
+persistence:
+  # Enable persistence using Persistent Volume Claim
+  enabled: true
+  
+  # Storage class to use (uses default storage class if not specified)
+  # storageClass: ""
+  
+  # Size of the persistent volume
+  size: 1Gi
+  
+  # Access mode for the persistent volume
+  # - ReadWriteOnce: Can be mounted as read-write by a single node
+  # - ReadOnlyMany: Can be mounted read-only by many nodes
+  # - ReadWriteMany: Can be mounted as read-write by many nodes
+  accessMode: ReadWriteOnce
+  
+  # Existing PVC to use (if not set, a new one will be created)
+  # existingClaim: ""

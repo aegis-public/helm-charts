@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      strategy:
+        type: Recreate
+      serviceAccountName: {{ .Release.Name }}
+      containers:
+        - name: workspace-connector
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: AEGIS_SERVER_PORT
+              value: "8080"
+            - name: AEGIS_CONFIG_FILE
+              value: "/config.toml"
+            - name: AEGIS_DATABASE_FILE_PATH
+              value: "/data/aegis.db"
+            {{- range $key, $value := .Values.config.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- with .Values.resources }}
+          resources: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: "/config.toml"
+              subPath: config.toml
+            - name: database
+              {{- if .Values.persistence.enabled }}
+              mountPath: "/data"
+              {{- else }}
+              mountPath: "/aegis.db"
+              subPath: aegis.db
+              {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ .Release.Name }}
+            items:
+              - key: config.toml
+                path: config.toml
+        {{- if .Values.persistence.enabled }}
+        - name: database
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-db
+        {{- else }}
+        - name: database
+          hostPath:
+            path: "/tmp/aegis.db"
+            type: FileOrCreate
+        {{- end }}
