@@ -6,4 +6,4 @@ metadata:
     app: {{ .Release.Name }}
 data:
   config.toml: |
-{{ .Files.Get .Values.config.path | indent 4 }}
+{{ .Values.config | indent 4 }}
