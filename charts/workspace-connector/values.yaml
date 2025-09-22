@@ -58,7 +58,7 @@ image:
 serviceAccount:
   workloadIdentity:
     # GCP service account to use for authentication
-    gcpServiceAccount: lighthouse@aegis-reasonablesecurityai.iam.gserviceaccount.com
+    # gcpServiceAccount: lighthouse@aegis-reasonablesecurityai.iam.gserviceaccount.com
 
 # Container resource limits (max) and requests (required)
 resources:
@@ -91,7 +91,7 @@ ingress:
 
   # Ingress hostname
   host: console.aegisai.ai
-  pathPrefix: /reasonablesecurityai/workspace-connector(/|$)(.*)
+  path: /reasonablesecurityai/workspace-connector(/|$)(.*)
   pathType: ImplementationSpecific
 
   # Ingress annotations
