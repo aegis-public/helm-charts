@@ -1,11 +1,47 @@
 # Default values for workspace-connector
 # This is a YAML-formatted file. Declare variables to be passed into your templates.
 
-
 # Configuration for the workspace connector
 config:
   # Contents of the config file
-  toml: ""
+  toml: |
+    # workspace kind, either "google" or "microsoft"
+    workspace_kind = "google"
+
+    # list of accounts to watch for received emails
+    # set externally
+    # accounts = ["anukul@reasonablesecurityai.com"]
+
+    # sqlite database file path, for storing state
+    # set externally
+    # database_file_path = "./aegis.db"
+
+    [[loggers]]
+    format = "pretty"
+    level = "debug"
+
+    # google workspace config
+    # set externally
+    [google]
+    # service account email to authenticate actions (create message subscriptions, fetch messages etc)
+    # service_account_email = "aegis-workspace-connector@aegis-reasonablesecurityai.iam.gserviceaccount.com"
+    # topic name for gmail push notification watch across all user inboxes
+    # topic_gmail_inbox_watch = "projects/aegis-reasonablesecurityai/topics/gmail-inbox"
+
+    # http server config
+    [server]
+    # port to listen on
+    port = "8080"
+
+    # aegis pubsub message queue config
+    [aegis]
+    # oauth client id of the service account that signs pubsub messages
+    service_account_oauth_client_id = "106421262602279694955"
+    # project id of the pubsub instance
+    project_id = "friendly-access-450904-h1"
+    # topic name for the workspace connector to publish received messages
+    # set externally
+    # topic_messages_received = "projects/friendly-access-450904-h1/topics/email_messages.reasonablesecurityai.com.received"
   # Environment variables to pass to the application
   env: {}
 
@@ -25,13 +61,14 @@ serviceAccount:
     gcpServiceAccount: lighthouse@aegis-reasonablesecurityai.iam.gserviceaccount.com
 
 # Container resource limits (max) and requests (required)
-resources: {}
+resources:
+  {}
   # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+  #   cpu: 100m
+  #   memory: 128Mi
   # requests:
-    #   cpu: 100m
-    #   memory: 128Mi
+  #   cpu: 100m
+  #   memory: 128Mi
 
 # Service configuration
 service:
@@ -40,7 +77,7 @@ service:
   # Service port
   port: 8080
   # Node port (only used if service.type is NodePort)
-  # nodePort: 
+  # nodePort:
   # LoadBalancer IP (only used if service.type is LoadBalancer)
   # loadBalancerIP:
 
@@ -48,10 +85,10 @@ service:
 ingress:
   # Enable/disable ingress
   enabled: true
-  
+
   # Ingress class name
   className: nginx
-  
+
   # Ingress hostname
   host: console.aegisai.ai
   pathPrefix: /reasonablesecurityai/workspace-connector(/|$)(.*)
@@ -60,7 +97,7 @@ ingress:
   # Ingress annotations
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-  
+
   # TLS configuration
   tls:
     # Enable TLS
@@ -68,23 +105,22 @@ ingress:
     # Name of the secret containing TLS certificate and key
     secretName: ""
 
-
 # Persistence configuration for database storage
 persistence:
   # Enable persistence using Persistent Volume Claim
   enabled: true
-  
+
   # Storage class to use (uses default storage class if not specified)
   # storageClass: ""
-  
+
   # Size of the persistent volume
   size: 1Gi
-  
+
   # Access mode for the persistent volume
   # - ReadWriteOnce: Can be mounted as read-write by a single node
   # - ReadOnlyMany: Can be mounted read-only by many nodes
   # - ReadWriteMany: Can be mounted as read-write by many nodes
   accessMode: ReadWriteOnce
-  
+
   # Existing PVC to use (if not set, a new one will be created)
   # existingClaim: ""
