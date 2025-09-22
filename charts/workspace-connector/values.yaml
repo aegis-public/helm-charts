@@ -4,8 +4,8 @@
 
 # Configuration for the workspace connector
 config:
-  # Path to the configuration file
-  toml: config/aegis.toml
+  # Contents of the config file
+  toml: ""
   # Environment variables to pass to the application
   env: {}
 
