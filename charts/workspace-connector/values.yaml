@@ -42,6 +42,9 @@ config:
     # topic name for the workspace connector to publish received messages
     # set externally
     # topic_messages_received = "projects/friendly-access-450904-h1/topics/email_messages.reasonablesecurityai.com.received"
+
+    # [backfill]
+    # query = "newer_than:7d"
   # Environment variables to pass to the application
   env: {}
 

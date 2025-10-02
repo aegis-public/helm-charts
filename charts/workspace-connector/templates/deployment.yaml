@@ -6,6 +6,8 @@ metadata:
     app: {{ .Release.Name }}
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: {{ .Release.Name }}
@@ -14,8 +16,6 @@ spec:
       labels:
         app: {{ .Release.Name }}
     spec:
-      strategy:
-        type: Recreate
       serviceAccountName: {{ .Release.Name }}
       containers:
         - name: workspace-connector
