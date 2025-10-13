@@ -4,6 +4,8 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
+  annotations:
+    logs/collect: "true"
 spec:
   replicas: 1
   strategy:
