@@ -17,7 +17,13 @@ config:
     # database_file_path = "./aegis.db"
 
     [[loggers]]
+    output = "stdout"
     format = "pretty"
+    level = "debug"
+
+    [[loggers]]
+    output = "stderr"
+    format = "json"
     level = "debug"
 
     # google workspace config
