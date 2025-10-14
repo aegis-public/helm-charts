@@ -47,7 +47,8 @@ config:
     # [backfill]
     # query = "newer_than:7d"
   # Environment variables to pass to the application
-  env: {}
+  env:
+    AEGIS_TRACER_EXPORTER_ENDPOINT: otel-collector-opentelemetry-collector.opentelemetry.svc.cluster.local:4317
 
 # Image configuration
 image:
