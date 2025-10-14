@@ -48,7 +48,7 @@ config:
     # query = "newer_than:7d"
   # Environment variables to pass to the application
   env:
-    AEGIS_TRACER_EXPORTER_ENDPOINT: http://localhost:4317
+    AEGIS_TRACER_EXPORTER_ENDPOINT: localhost:4317
 
 # Image configuration
 image:
