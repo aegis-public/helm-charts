@@ -53,7 +53,7 @@ config:
 # Image configuration
 image:
   # Image repository
-  repository: us-central1-docker.pkg.dev/friendly-access-450904-h1/workspace-connector/workspace-connector
+  repository: gcr.io/friendly-access-450904-h1/workspace-connector
   # Image tag
   tag: latest
   # Image pull policy
