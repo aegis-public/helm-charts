@@ -5,50 +5,22 @@
 config:
   # Contents of the config file
   toml: |
-    # workspace kind, either "google" or "microsoft"
     workspace_kind = "google"
-
-    # list of accounts to watch for received emails
-    # set externally
-    # accounts = ["anukul@reasonablesecurityai.com"]
-
-    # sqlite database file path, for storing state
-    # set externally
-    # database_file_path = "./aegis.db"
 
     [[loggers]]
     output = "stdout"
-    format = "json"
+    format = "pretty"
     level = "debug"
 
-    # google workspace config
-    # set externally
-    [google]
-    # service account email to authenticate actions (create message subscriptions, fetch messages etc)
-    # service_account_email = "aegis-workspace-connector@aegis-reasonablesecurityai.iam.gserviceaccount.com"
-    # topic name for gmail push notification watch across all user inboxes
-    # topic_gmail_inbox_watch = "projects/aegis-reasonablesecurityai/topics/gmail-inbox"
+    [[loggers]]
+    format = "otlp"
 
-    # http server config
-    [server]
-    # port to listen on
-    port = "8080"
-
-    # aegis pubsub message queue config
     [aegis]
-    # oauth client id of the service account that signs pubsub messages
     service_account_oauth_client_id = "106421262602279694955"
-    # project id of the pubsub instance
     project_id = "friendly-access-450904-h1"
-    # topic name for the workspace connector to publish received messages
-    # set externally
-    # topic_messages_received = "projects/friendly-access-450904-h1/topics/email_messages.reasonablesecurityai.com.received"
-
-    # [backfill]
-    # query = "newer_than:7d"
   # Environment variables to pass to the application
   env:
-    AEGIS_TRACER_EXPORTER_ENDPOINT: otel-collector-opentelemetry-collector.opentelemetry.svc.cluster.local:4317
+    AEGIS_OPENTELEMETRY_EXPORTER_ENDPOINT: otel-collector-opentelemetry-collector.opentelemetry.svc.cluster.local:4317
 
 # Image configuration
 image:
