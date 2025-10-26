@@ -15,8 +15,6 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-      annotations:
-        logs.collect: "true"
     spec:
       serviceAccountName: {{ .Release.Name }}
       containers:
