@@ -5,8 +5,6 @@
 config:
   # Contents of the config file
   toml: |
-    workspace_kind = "google"
-
     [[loggers]]
     output = "stdout"
     format = "pretty"
@@ -16,7 +14,9 @@ config:
     format = "otlp"
 
     [aegis]
+    # oauth client id of the aegis gcp service account that signs pubsub messages
     service_account_oauth_client_id = "106421262602279694955"
+    # project id of the aegis gcp project that hosts pubsub infra
     project_id = "friendly-access-450904-h1"
   # Environment variables to pass to the application
   env:
