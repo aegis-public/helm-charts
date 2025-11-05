@@ -8,6 +8,8 @@ metadata:
   annotations:
     # pubsub message size limit
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    # temporary increase timeout to 10min
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
