@@ -81,23 +81,3 @@ ingress:
     enabled: true
     # Name of the secret containing TLS certificate and key
     secretName: ""
-
-# Persistence configuration for database storage
-persistence:
-  # Enable persistence using Persistent Volume Claim
-  enabled: true
-
-  # Storage class to use (uses default storage class if not specified)
-  # storageClass: ""
-
-  # Size of the persistent volume
-  size: 1Gi
-
-  # Access mode for the persistent volume
-  # - ReadWriteOnce: Can be mounted as read-write by a single node
-  # - ReadOnlyMany: Can be mounted read-only by many nodes
-  # - ReadWriteMany: Can be mounted as read-write by many nodes
-  accessMode: ReadWriteOnce
-
-  # Existing PVC to use (if not set, a new one will be created)
-  # existingClaim: ""
