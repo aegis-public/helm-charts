@@ -81,3 +81,6 @@ ingress:
     enabled: true
     # Name of the secret containing TLS certificate and key
     secretName: ""
+
+cloudSql:
+  instanceConnectionName:

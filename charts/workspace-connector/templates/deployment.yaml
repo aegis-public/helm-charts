@@ -41,6 +41,19 @@ spec:
             - name: config
               mountPath: "/config.toml"
               subPath: config.toml
+        - name: cloud-sql-proxy
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.1
+          args:
+            - "--auto-iam-authn"
+            - "--structured-logs"
+            - "--port=5432"
+            - "{{ .Values.cloudSql.instanceConnectionName }}"
+          securityContext:
+            runAsNonRoot: true
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"
       volumes:
         - name: config
           configMap:
