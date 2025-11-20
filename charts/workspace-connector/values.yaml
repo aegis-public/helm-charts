@@ -87,3 +87,6 @@ ingress:
 
 cloudSql:
   instanceConnectionName:
+
+cronjobs:
+  enabled: false
