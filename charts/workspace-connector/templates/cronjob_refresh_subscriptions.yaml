@@ -17,6 +17,6 @@ spec:
             - /bin/sh
             - -c
             - |
-              curl http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:8080/refresh_subscriptions
+              curl -X POST http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:8080/refresh_subscriptions
           restartPolicy: OnFailure
 {{- end }}
