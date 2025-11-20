@@ -30,7 +30,7 @@ image:
   # Image repository
   repository: gcr.io/friendly-access-450904-h1/workspace-connector
   # Image tag
-  tag: latest
+  tag: rsv1
   # Image pull policy
   pullPolicy: Always
 
