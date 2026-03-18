@@ -21,6 +21,10 @@ spec:
         - name: workspace-connector
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "3"]
           ports:
             - containerPort: {{ .Values.service.port }}
           env:
