@@ -41,6 +41,11 @@ spec:
             - name: config
               mountPath: "/config.toml"
               subPath: config.toml
+            {{- if .Values.microsoft.wif.enabled }}
+            - name: azure-token
+              mountPath: /var/run/secrets/azure-token
+              readOnly: true
+            {{- end }}
         - name: cloud-sql-proxy
           image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.1
           args:
@@ -61,3 +66,12 @@ spec:
             items:
               - key: config.toml
                 path: config.toml
+        {{- if .Values.microsoft.wif.enabled }}
+        - name: azure-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  audience: api://AzureADTokenExchange
+                  expirationSeconds: 3600
+                  path: token
+        {{- end }}

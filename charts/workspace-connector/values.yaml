@@ -87,3 +87,12 @@ ingress:
 
 cloudSql:
   instanceConnectionName:
+
+# Microsoft Workload Identity Federation configuration
+microsoft:
+  wif:
+    # Enable Azure Workload Identity Federation token volume projection.
+    # When true, a projected KSA OIDC token is mounted at
+    # /var/run/secrets/azure-token/token. Required for tenants using WIF
+    # (i.e. no AZURE_CLIENT_SECRET configured).
+    enabled: false
