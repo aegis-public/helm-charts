@@ -9,8 +9,10 @@ metadata:
     {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  {{- with .Values.strategy }}
   strategy:
-    type: Recreate
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}
@@ -20,10 +22,17 @@ spec:
         app: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ .Release.Name }}
+      {{- with .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ . }}
+      {{- end }}
       containers:
         - name: workspace-connector
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.lifecycle }}
+          lifecycle:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: {{ .Values.service.port }}
           env:
@@ -39,6 +48,14 @@ spec:
             {{- end }}
           {{- with .Values.resources }}
           resources: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: config

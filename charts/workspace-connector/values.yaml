@@ -4,6 +4,21 @@
 # Number of replicas for the workspace connector deployment
 replicaCount: 1
 
+# Deployment update strategy. Set by consumer.
+strategy: {}
+
+# Pod grace period before SIGKILL. Set by consumer.
+terminationGracePeriodSeconds:
+
+# Container lifecycle hooks. Set by consumer.
+lifecycle: {}
+
+# Readiness probe. Set by consumer.
+readinessProbe: {}
+
+# Liveness probe. Set by consumer.
+livenessProbe: {}
+
 # Configuration for the workspace connector
 config:
   # Contents of the config file
