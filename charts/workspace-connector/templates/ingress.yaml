@@ -11,7 +11,7 @@ metadata:
     # off: stream Flush()ed bytes to upstream immediately.
     nginx.ingress.kubernetes.io/proxy-buffering: "off"
     nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
-    # was 600s (pre-ack-immediate); fail fast on hung backends.
+    # was 600s; fail fast on hung backends.
     nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.proxyReadTimeout | default "60" | quote }}
     nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.proxySendTimeout | default "60" | quote }}
     nginx.ingress.kubernetes.io/proxy-connect-timeout: {{ .Values.ingress.proxyConnectTimeout | default "10" | quote }}
