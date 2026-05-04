@@ -108,6 +108,20 @@ ingress:
 cloudSql:
   instanceConnectionName:
 
+# Persistent volume configuration
+persistence:
+  # Enable persistent storage
+  enabled: true
+  # Storage size
+  size: 2Gi
+  # Mount path inside the container
+  mountPath: /data
+  # Storage class (leave empty for cluster default)
+  storageClassName: ""
+  # Access modes
+  accessModes:
+    - ReadWriteOnce
+
 # Microsoft Workload Identity Federation configuration
 microsoft:
   wif:

@@ -61,6 +61,10 @@ spec:
             - name: config
               mountPath: "/config.toml"
               subPath: config.toml
+            {{- if .Values.persistence.enabled }}
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+            {{- end }}
             {{- if .Values.microsoft.wif.enabled }}
             - name: azure-token
               mountPath: /var/run/secrets/azure-token
@@ -86,6 +90,11 @@ spec:
             items:
               - key: config.toml
                 path: config.toml
+        {{- if .Values.persistence.enabled }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}
+        {{- end }}
         {{- if .Values.microsoft.wif.enabled }}
         - name: azure-token
           projected:
