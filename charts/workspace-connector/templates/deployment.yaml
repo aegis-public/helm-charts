@@ -25,6 +25,21 @@ spec:
       {{- with .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ . }}
       {{- end }}
+      initContainers:
+        - name: cloud-sql-proxy
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.1
+          restartPolicy: Always
+          args:
+            - "--auto-iam-authn"
+            - "--structured-logs"
+            - "--port=5432"
+            - "{{ .Values.cloudSql.instanceConnectionName }}"
+          securityContext:
+            runAsNonRoot: true
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
       containers:
         - name: workspace-connector
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -70,19 +85,6 @@ spec:
               mountPath: /var/run/secrets/azure-token
               readOnly: true
             {{- end }}
-        - name: cloud-sql-proxy
-          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.1
-          args:
-            - "--auto-iam-authn"
-            - "--structured-logs"
-            - "--port=5432"
-            - "{{ .Values.cloudSql.instanceConnectionName }}"
-          securityContext:
-            runAsNonRoot: true
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "100m"
       volumes:
         - name: config
           configMap:
