@@ -76,9 +76,9 @@ spec:
             - name: config
               mountPath: "/config.toml"
               subPath: config.toml
-            {{- if .Values.persistence.enabled }}
+            {{- if .Values.storage }}
             - name: data
-              mountPath: {{ .Values.persistence.mountPath }}
+              mountPath: {{ .Values.storage.mountPath }}
             {{- end }}
             {{- if .Values.microsoft.wif.enabled }}
             - name: azure-token
@@ -92,10 +92,21 @@ spec:
             items:
               - key: config.toml
                 path: config.toml
-        {{- if .Values.persistence.enabled }}
+        {{- if .Values.storage }}
         - name: data
+          {{- if eq .Values.storage.type "emptyDir" }}
+          emptyDir:
+            {{- with .Values.storage.emptyDir.sizeLimit }}
+            sizeLimit: {{ . }}
+            {{- end }}
+          {{- else if eq .Values.storage.type "pvc" }}
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}
+            claimName: {{ .Release.Name }}-data
+          {{- else if eq .Values.storage.type "hostPath" }}
+          hostPath:
+            path: {{ .Values.storage.hostPath.path }}
+            type: {{ .Values.storage.hostPath.type }}
+          {{- end }}
         {{- end }}
         {{- if .Values.microsoft.wif.enabled }}
         - name: azure-token

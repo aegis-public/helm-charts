@@ -1,17 +1,17 @@
-{{- if .Values.persistence.enabled }}
+{{- if and .Values.storage (eq .Values.storage.type "pvc") }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Release.Name }}-data
   labels:
     app: {{ .Release.Name }}
 spec:
   accessModes:
-    {{- toYaml .Values.persistence.accessModes | nindent 4 }}
-  {{- if .Values.persistence.storageClassName }}
-  storageClassName: {{ .Values.persistence.storageClassName | quote }}
+    {{- toYaml .Values.storage.pvc.accessModes | nindent 4 }}
+  {{- if .Values.storage.pvc.storageClassName }}
+  storageClassName: {{ .Values.storage.pvc.storageClassName | quote }}
   {{- end }}
   resources:
     requests:
-      storage: {{ .Values.persistence.size }}
+      storage: {{ .Values.storage.pvc.size }}
 {{- end }}
