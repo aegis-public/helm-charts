@@ -13,6 +13,9 @@ terminationGracePeriodSeconds:
 # Container lifecycle hooks. Set by consumer.
 lifecycle: {}
 
+# Startup probe. Set by consumer. Gates liveness/readiness until container fully up.
+startupProbe: {}
+
 # Readiness probe. Set by consumer.
 readinessProbe: {}
 
