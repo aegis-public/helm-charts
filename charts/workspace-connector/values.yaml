@@ -131,6 +131,10 @@ storage:
     path: ""
     type: Directory
 
+cronJobs:
+  refreshPubsub:
+    suspend: false
+
 # Microsoft Workload Identity Federation configuration
 microsoft:
   wif:

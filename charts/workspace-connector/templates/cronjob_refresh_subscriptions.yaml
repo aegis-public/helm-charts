@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-refresh-pubsub
 spec:
   schedule: "0 0 * * *"  # Run at midnight every day
+  suspend: {{ .Values.cronJobs.refreshPubsub.suspend | default false }}
   jobTemplate:
     spec:
       template:
