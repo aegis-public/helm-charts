@@ -27,7 +27,8 @@ spec:
       {{- end }}
       initContainers:
         - name: cloud-sql-proxy
-          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.1
+          # cloud-sql-proxy v2.22.1 (2026-06-10), pinned by digest
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.22.1@sha256:f44bf79315ab91c623e4a811f02c517ee46c123a7c459e35997906821ca8d76a
           restartPolicy: Always
           args:
             - "--auto-iam-authn"
