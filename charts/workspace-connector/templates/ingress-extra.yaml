@@ -1,0 +1,38 @@
+{{- range $idx, $ing := .Values.extraIngresses }}
+{{- if $idx }}
+---
+{{- end }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $ing.name }}
+  labels:
+    app: {{ $.Release.Name }}
+  {{- with $ing.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $ing.className }}
+  ingressClassName: {{ $ing.className }}
+  {{- end }}
+  {{- if and $ing.tls $ing.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ $ing.host }}
+      {{- if $ing.tls.secretName }}
+      secretName: {{ $ing.tls.secretName }}
+      {{- end }}
+  {{- end }}
+  rules:
+    - host: {{ $ing.host }}
+      http:
+        paths:
+          - path: {{ $ing.path }}
+            pathType: {{ $ing.pathType | default "ImplementationSpecific" }}
+            backend:
+              service:
+                name: {{ $.Release.Name }}
+                port:
+                  number: {{ $.Values.service.port }}
+{{- end }}
