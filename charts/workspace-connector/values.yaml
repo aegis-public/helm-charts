@@ -108,6 +108,31 @@ ingress:
     # Name of the secret containing TLS certificate and key
     secretName: ""
 
+# Sibling Ingress resources produced alongside the main `ingress` block above.
+# Each item renders its own Ingress with its own annotations, so an oauth2-proxy-
+# gated path can live next to the un-gated /public/* path (annotations apply at
+# the Ingress-resource level in NGINX and can't be mixed on one resource).
+# Consumed by the user-restore-request + outbound-DLP-appeal flows.
+extraIngresses: []
+# Example:
+# extraIngresses:
+#   - name: aegis-workspace-connector-appeal
+#     className: nginx
+#     host: console.aegisai.ai
+#     path: /<tenant>/(appeal.*)
+#     pathType: ImplementationSpecific
+#     tls:
+#       enabled: true
+#     annotations:
+#       nginx.ingress.kubernetes.io/auth-url: "https://auth.aegisai.ai/oauth2/auth"
+#       # Leave auth-signin bare — ingress-nginx appends rd=<url-encoded> itself
+#       # via auth-signin-redirect-param. Embedding rd=$scheme://$host$request_uri
+#       # here doesn't URL-encode and breaks multi-param URLs on fresh-auth.
+#       nginx.ingress.kubernetes.io/auth-signin: "https://auth.aegisai.ai/oauth2/start"
+#       nginx.ingress.kubernetes.io/auth-response-headers: "X-Auth-Request-Email"
+#       nginx.ingress.kubernetes.io/rewrite-target: "/$1"
+#       nginx.ingress.kubernetes.io/use-regex: "true"
+
 cloudSql:
   instanceConnectionName:
 
