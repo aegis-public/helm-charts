@@ -108,6 +108,13 @@ ingress:
     # Name of the secret containing TLS certificate and key
     secretName: ""
 
+# Sibling Ingress resources produced alongside the main `ingress` block above.
+# Each item renders its own Ingress with its own annotations, so an oauth2-proxy-
+# gated path can live next to the un-gated /public/* path (annotations apply at
+# the Ingress-resource level in NGINX and can't be mixed on one resource).
+# Consumed by the user-restore-request + outbound-DLP-appeal flows.
+extraIngresses: []
+
 cloudSql:
   instanceConnectionName:
 
