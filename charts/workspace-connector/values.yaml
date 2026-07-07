@@ -114,24 +114,6 @@ ingress:
 # the Ingress-resource level in NGINX and can't be mixed on one resource).
 # Consumed by the user-restore-request + outbound-DLP-appeal flows.
 extraIngresses: []
-# Example:
-# extraIngresses:
-#   - name: aegis-workspace-connector-appeal
-#     className: nginx
-#     host: console.aegisai.ai
-#     path: /<tenant>/(appeal.*)
-#     pathType: ImplementationSpecific
-#     tls:
-#       enabled: true
-#     annotations:
-#       nginx.ingress.kubernetes.io/auth-url: "https://auth.aegisai.ai/oauth2/auth"
-#       # Leave auth-signin bare — ingress-nginx appends rd=<url-encoded> itself
-#       # via auth-signin-redirect-param. Embedding rd=$scheme://$host$request_uri
-#       # here doesn't URL-encode and breaks multi-param URLs on fresh-auth.
-#       nginx.ingress.kubernetes.io/auth-signin: "https://auth.aegisai.ai/oauth2/start"
-#       nginx.ingress.kubernetes.io/auth-response-headers: "X-Auth-Request-Email"
-#       nginx.ingress.kubernetes.io/rewrite-target: "/$1"
-#       nginx.ingress.kubernetes.io/use-regex: "true"
 
 cloudSql:
   instanceConnectionName:
