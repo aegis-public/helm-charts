@@ -1,0 +1,6 @@
+{{- if .Values.serviceExport.enabled }}
+apiVersion: net.gke.io/v1
+kind: ServiceExport
+metadata:
+  name: {{ .Release.Name }}
+{{- end }}

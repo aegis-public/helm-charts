@@ -142,6 +142,9 @@ cronJobs:
   refreshPubsub:
     suspend: false
 
+serviceExport:
+  enabled: false   # requires a GKE fleet with Multi-Cluster Services
+
 # Microsoft Workload Identity Federation configuration
 microsoft:
   wif:
