@@ -90,6 +90,11 @@ spec:
               mountPath: /var/run/secrets/azure-token
               readOnly: true
             {{- end }}
+            {{- if .Values.clakehouseCaBundle }}
+            - name: clakehouse-ca
+              mountPath: /etc/clakehouse/ca
+              readOnly: true
+            {{- end }}
       volumes:
         - name: config
           configMap:
@@ -121,4 +126,9 @@ spec:
                   audience: api://AzureADTokenExchange
                   expirationSeconds: 3600
                   path: token
+        {{- end }}
+        {{- if .Values.clakehouseCaBundle }}
+        - name: clakehouse-ca
+          secret:
+            secretName: {{ .Values.clakehouseCaBundle }}
         {{- end }}
