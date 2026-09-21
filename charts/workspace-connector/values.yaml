@@ -156,3 +156,12 @@ microsoft:
     # /var/run/secrets/azure-token/token. Required for tenants using WIF
     # (i.e. no AZURE_CLIENT_SECRET configured).
     enabled: false
+
+# Ingress NetworkPolicy for the connector pods. Disabled by default.
+# The actual ingress rules are supplied by the consumer.
+networkPolicy:
+  # Enable/disable the NetworkPolicy resource
+  enabled: false
+  # Ingress rules, rendered verbatim into spec.ingress. See the NetworkPolicy
+  # NetworkPolicyIngressRule schema.
+  ingress: []
