@@ -157,6 +157,16 @@ microsoft:
     # (i.e. no AZURE_CLIENT_SECRET configured).
     enabled: false
 
+# Env synced by External Secrets from Secret Manager into a Secret the pod
+# loads with envFrom. Disabled by default.
+externalSecret:
+  enabled: false
+  # SecretStore in the release namespace.
+  secretStore: gcp-secret-store
+  refreshInterval: 1h
+  # Env var name => Secret Manager secret name.
+  env: {}
+
 # Ingress NetworkPolicy for the connector pods. Disabled by default.
 # The actual ingress rules are supplied by the consumer.
 networkPolicy:
