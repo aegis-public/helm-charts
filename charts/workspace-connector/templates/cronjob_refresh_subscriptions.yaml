@@ -5,17 +5,28 @@ metadata:
 spec:
   schedule: "0 0 * * *"  # Run at midnight every day
   suspend: {{ .Values.cronJobs.refreshPubsub.suspend | default false }}
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 7500
       template:
         spec:
           containers:
           - name: refresh-pubsub
-            image: curlimages/curl:latest
+            # curl 8.22.0 (2026-09-02), pinned by multi-arch index digest
+            image: curlimages/curl:8.22.0@sha256:58adaa4e8dca9c988bae2aba4ab3434a0bb2da16bbe3f92dec39ec7785166777
             imagePullPolicy: IfNotPresent
             command:
             - /bin/sh
             - -c
             - |
-              curl -X POST http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:8080/refresh_subscriptions
-          restartPolicy: OnFailure
+              code=$(curl --silent --show-error --max-time 3600 \
+                --output /tmp/body --write-out '%{http_code}' \
+                -X POST http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:8080/refresh_subscriptions)
+              rc=$?
+              cat /tmp/body 2>/dev/null; echo
+              if [ "$rc" -ne 0 ]; then echo "refresh request failed: curl exit $rc"; exit "$rc"; fi
+              echo "refresh_subscriptions returned HTTP $code"
+              case "$code" in 200) exit 0 ;; 409) exit 0 ;; *) exit 1 ;; esac
+          restartPolicy: Never
