@@ -7,6 +7,10 @@ metadata:
     {{- with .Values.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+  {{- if .Values.reloader.enabled }}
+  annotations:
+    reloader.stakater.com/auto: "true"
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   {{- with .Values.strategy }}
@@ -62,10 +66,17 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-          {{- if .Values.externalSecret.enabled }}
+          {{- if or .Values.envConfigMap.enabled .Values.externalSecret.enabled }}
+          {{- /* The last source wins on a shared key, so the Secret beats the ConfigMap. */}}
           envFrom:
+            {{- if .Values.envConfigMap.enabled }}
+            - configMapRef:
+                name: {{ .Values.envConfigMap.name | default (printf "%s-env-vars" .Release.Name) }}
+            {{- end }}
+            {{- if .Values.externalSecret.enabled }}
             - secretRef:
                 name: {{ .Release.Name }}-env
+            {{- end }}
           {{- end }}
           {{- with .Values.resources }}
           resources: {{- toYaml . | nindent 12 }}

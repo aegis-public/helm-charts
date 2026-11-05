@@ -1,3 +1,4 @@
+{{- if .Values.ingress.render }}
 {{- range $idx, $ing := .Values.extraIngresses }}
 {{- if $idx }}
 ---
@@ -8,10 +9,12 @@ metadata:
   name: {{ $ing.name }}
   labels:
     app: {{ $.Release.Name }}
-  {{- with $ing.annotations }}
   annotations:
+    # Left in place when a later upgrade stops rendering it.
+    helm.sh/resource-policy: keep
+    {{- with $ing.annotations }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
 spec:
   {{- if $ing.className }}
   ingressClassName: {{ $ing.className }}
@@ -35,4 +38,5 @@ spec:
                 name: {{ $.Release.Name }}
                 port:
                   number: {{ $.Values.service.port }}
+{{- end }}
 {{- end }}
