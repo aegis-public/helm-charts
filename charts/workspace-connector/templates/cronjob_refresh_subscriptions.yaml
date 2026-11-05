@@ -9,10 +9,36 @@ spec:
     spec:
       template:
         spec:
+          {{- with .Values.refreshCronJob.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.refreshCronJob.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.refreshCronJob.podSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           containers:
           - name: refresh-pubsub
+            {{- with .Values.refreshCronJob.image }}
+            {{- if .repository }}
+            image: "{{ .repository }}:{{ .tag }}{{- with .digest }}@{{ . }}{{- end }}"
+            {{- else }}
             image: curlimages/curl:latest
+            {{- end }}
+            {{- end }}
             imagePullPolicy: IfNotPresent
+            {{- with .Values.refreshCronJob.securityContext }}
+            securityContext:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .Values.refreshCronJob.resources }}
+            resources:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
             command:
             - /bin/sh
             - -c
