@@ -197,3 +197,27 @@ networkPolicy:
   # Ingress rules, rendered verbatim into spec.ingress. See the NetworkPolicy
   # NetworkPolicyIngressRule schema.
   ingress: []
+
+nodeSelector: {}
+tolerations: []
+podSecurityContext: {}
+securityContext: {}
+
+cloudSqlProxy:
+  image:
+    repository: ""
+    tag: ""
+    digest: ""
+  securityContext: {}
+  resources: {}
+
+refreshCronJob:
+  image:
+    repository: ""
+    tag: ""
+    digest: ""
+  nodeSelector: {}
+  tolerations: []
+  podSecurityContext: {}
+  securityContext: {}
+  resources: {}

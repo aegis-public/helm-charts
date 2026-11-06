@@ -29,10 +29,27 @@ spec:
       {{- with .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ . }}
       {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       initContainers:
         - name: cloud-sql-proxy
-          # cloud-sql-proxy v2.22.1 (2026-06-10), pinned by digest
+          {{- with .Values.cloudSqlProxy.image }}
+          {{- if .repository }}
+          image: "{{ .repository }}:{{ .tag }}{{- with .digest }}@{{ . }}{{- end }}"
+          {{- else }}
           image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.22.1@sha256:f44bf79315ab91c623e4a811f02c517ee46c123a7c459e35997906821ca8d76a
+          {{- end }}
+          {{- end }}
           restartPolicy: Always
           args:
             - "--auto-iam-authn"
@@ -40,15 +57,27 @@ spec:
             - "--port=5432"
             - "{{ .Values.cloudSql.instanceConnectionName }}"
           securityContext:
+            {{- with .Values.cloudSqlProxy.securityContext }}
+            {{- toYaml . | nindent 12 }}
+            {{- else }}
             runAsNonRoot: true
+            {{- end }}
           resources:
+            {{- with .Values.cloudSqlProxy.resources }}
+            {{- toYaml . | nindent 12 }}
+            {{- else }}
             requests:
               memory: "256Mi"
               cpu: "100m"
+            {{- end }}
       containers:
         - name: workspace-connector
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.lifecycle }}
           lifecycle:
             {{- toYaml . | nindent 12 }}
