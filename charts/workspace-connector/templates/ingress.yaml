@@ -1,4 +1,4 @@
-{{- if .Values.ingress.enabled -}}
+{{- if and .Values.ingress.enabled .Values.ingress.render -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -6,6 +6,8 @@ metadata:
   labels:
     app: {{ .Release.Name }}
   annotations:
+    # Left in place when a later upgrade stops rendering it.
+    helm.sh/resource-policy: keep
     # pubsub message size limit
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
     # off: stream Flush()ed bytes to upstream immediately.

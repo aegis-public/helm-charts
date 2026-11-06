@@ -84,6 +84,10 @@ ingress:
   # Enable/disable ingress
   enabled: true
 
+  # Whether the chart renders this Ingress and extraIngresses. Off when the
+  # consumer creates them outside the chart.
+  render: true
+
   # Ingress class name
   className: nginx
 
@@ -166,6 +170,24 @@ externalSecret:
   refreshInterval: 1h
   # Env var name => Secret Manager secret name.
   env: {}
+  # Whether the chart renders the ExternalSecret itself. Off when the consumer
+  # creates <release>-env outside the chart; the pod still loads it through
+  # envFrom while enabled is true.
+  render: true
+
+# Plain env loaded from a ConfigMap the consumer owns, through envFrom, so a
+# change to it reaches the pod without a chart upgrade. config.env entries are
+# still rendered inline and take precedence over it. Disabled by default.
+envConfigMap:
+  enabled: false
+  # Defaults to <release>-env-vars.
+  name: ""
+
+# Opt the Deployment in to stakater Reloader: a change to the env ConfigMap
+# (envConfigMap) or the env Secret (externalSecret) restarts it. A mounted
+# object such as the CA bundle does not. Disabled by default.
+reloader:
+  enabled: false
 
 # Ingress NetworkPolicy for the connector pods. Disabled by default.
 # The actual ingress rules are supplied by the consumer.
