@@ -183,9 +183,9 @@ envConfigMap:
   # Defaults to <release>-env-vars.
   name: ""
 
-# Opt the Deployment in to stakater Reloader: a change to any ConfigMap or
-# Secret the pod reads through envFrom or a volume restarts it. Disabled by
-# default.
+# Opt the Deployment in to stakater Reloader: a change to the env ConfigMap
+# (envConfigMap) or the env Secret (externalSecret) restarts it. A mounted
+# object such as the CA bundle does not. Disabled by default.
 reloader:
   enabled: false
 
