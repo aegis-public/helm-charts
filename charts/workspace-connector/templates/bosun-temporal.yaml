@@ -1,0 +1,49 @@
+{{- with .Values.bosunTemporal }}
+{{- if .serverCASecret }}
+# ESO reads the frontend CA as the connector's own service account, which holds secretAccessor on it.
+apiVersion: external-secrets.io/v1
+kind: SecretStore
+metadata:
+  name: {{ $.Release.Name }}-temporal-gcpsm
+  labels:
+    app: {{ $.Release.Name }}
+spec:
+  provider:
+    gcpsm:
+      projectID: {{ required "bosunTemporal.projectID is required with bosunTemporal.serverCASecret" .projectID }}
+      auth:
+        workloadIdentity:
+          {{- with .esoCluster }}
+          {{- if .projectID }}
+          clusterProjectID: {{ .projectID }}
+          {{- end }}
+          {{- if .location }}
+          clusterLocation: {{ .location }}
+          {{- end }}
+          {{- if .name }}
+          clusterName: {{ .name }}
+          {{- end }}
+          {{- end }}
+          serviceAccountRef:
+            name: {{ $.Release.Name }}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ $.Release.Name }}-temporal-server-ca
+  labels:
+    app: {{ $.Release.Name }}
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: {{ $.Release.Name }}-temporal-gcpsm
+    kind: SecretStore
+  target:
+    name: {{ $.Release.Name }}-temporal-server-ca
+    creationPolicy: Owner
+  data:
+    - secretKey: ca.crt
+      remoteRef:
+        key: {{ .serverCASecret }}
+{{- end }}
+{{- end }}
