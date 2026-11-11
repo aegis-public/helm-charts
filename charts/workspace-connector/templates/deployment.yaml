@@ -97,6 +97,10 @@ spec:
               value: "8080"
             - name: AEGIS_CONFIG_FILE
               value: "/config.toml"
+            {{- if .Values.bosunTemporal.serverCASecret }}
+            - name: AEGIS_BOSUN_TEMPORAL_SERVER_CA_PATH
+              value: "/etc/temporal/ca/ca.crt"
+            {{- end }}
             {{- range $key, $value := .Values.config.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
@@ -146,6 +150,11 @@ spec:
               mountPath: /etc/clakehouse/ca
               readOnly: true
             {{- end }}
+            {{- if .Values.bosunTemporal.serverCASecret }}
+            - name: temporal-server-ca
+              mountPath: /etc/temporal/ca
+              readOnly: true
+            {{- end }}
       volumes:
         - name: config
           configMap:
@@ -182,4 +191,9 @@ spec:
         - name: clakehouse-ca
           secret:
             secretName: {{ .Values.clakehouseCaBundle }}
+        {{- end }}
+        {{- if .Values.bosunTemporal.serverCASecret }}
+        - name: temporal-server-ca
+          secret:
+            secretName: {{ .Release.Name }}-temporal-server-ca
         {{- end }}

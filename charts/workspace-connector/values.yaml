@@ -152,6 +152,20 @@ serviceExport:
 # Clakehouse CA bundle name. Mounted when non-empty.
 clakehouseCaBundle: ""
 
+# Bosun Temporal's frontend CA, synced by External Secrets from Secret Manager and
+# mounted at /etc/temporal/ca for the connector's mTLS client. Off while
+# serverCASecret is empty.
+bosunTemporal:
+  # Secret Manager secret holding the frontend CA, e.g. temporal-server-ca.
+  serverCASecret: ""
+  # Project that holds serverCASecret.
+  projectID: ""
+  # The cluster ESO's Workload Identity runs in. Empty fields come from the metadata server.
+  esoCluster:
+    projectID: ""
+    location: ""
+    name: ""
+
 # Microsoft Workload Identity Federation configuration
 microsoft:
   wif:
