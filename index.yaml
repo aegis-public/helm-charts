@@ -3,6 +3,16 @@ entries:
   workspace-connector:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2026-11-11T04:11:42.339298796Z"
+    description: A Helm chart for Aegis BYOC workspace connector
+    digest: 3a2911bd8b395375bf8b5e2091865f104f2c94d9b39217cf3383d303eda588d3
+    name: workspace-connector
+    type: application
+    urls:
+    - https://github.com/aegis-public/helm-charts/releases/download/workspace-connector-0.1.44/workspace-connector-0.1.44.tgz
+    version: 0.1.44
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2026-11-06T05:22:27.640158336Z"
     description: A Helm chart for Aegis BYOC workspace connector
     digest: 061e78fb826e4c7a1f9f79c3be36375b03f1c0869639031131511bc65881e3b0
@@ -501,4 +511,4 @@ entries:
     urls:
     - https://github.com/aegis-public/helm-charts/releases/download/workspace-connector-0.1.0/workspace-connector-0.1.0.tgz
     version: 0.1.0
-generated: "2026-11-06T05:22:27.640271706Z"
+generated: "2026-11-11T04:11:42.339539839Z"
